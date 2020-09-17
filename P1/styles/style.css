@@ -1,0 +1,34 @@
+:root {
+	--border-color: red;
+}
+
+body{
+	font-family: 'Press Start 2P', cursive;
+	background-color: black;
+	color: white;
+	text-align: center;
+}
+
+h1 {
+	color: var(--border-color);
+}
+
+canvas{
+	background-color: black;
+	border: 5px solid var(--border-color);
+}
+
+.selector {
+	border: 3px solid var(--border-color);
+	padding: 20px;
+	display: inline;
+}
+
+.selector > label {
+	font-size: 1.5em;
+	color: var(--border-color);
+}
+
+.selector > select {
+	font-size: 1.5em;
+}
