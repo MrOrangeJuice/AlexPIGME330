@@ -1,6 +1,6 @@
 let canvas, ctx;
 const canvasWidth = 1200, canvasHeight = 800;
-const cellWidth = 10;
+let cellWidth;
 const fps = 12;
 let lifeworld;
 let color;
@@ -14,10 +14,15 @@ function init(){
 	canvas.height = canvasHeight;
 	ctx = canvas.getContext("2d");
 	// TODO: init lifeworld
-	lifeworld = new Lifeworld(120,90,.2);
+	lifeworld = new Lifeworld(360,240,.2);
+	cellWidth = 10;
 	color = 'red';
 	root = document.documentElement;
 	loop();
+
+	document.querySelector('#widthChooser').onchange = function(e) {
+		cellWidth = e.target.value;
+	}
 
 	document.querySelector('#colorChooser').onchange = function(e) {
 		color = e.target.value;
