@@ -8,46 +8,108 @@
 	<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 	<link rel="icon" type="image/png" href="media/favicon-32x32.png" sizes="32x32" />
 	<link rel="icon" type="image/png" href="media/favicon-16x16.png" sizes="16x16" />
-	<script src="src/Lifeworld.js"></script>
-	<script src="src/main.js"></script>
+	<script src="src/LifeWorld.js"></script>
+	<script src="src/index.js"></script>
+	<script src="src/aapLIB.js"></script>
 </head>
 
 <body>
-	<h1>Game of Life</h1>
-	<div id="parent">
-		<canvas></canvas>
-	</div>
-	<br>
-	<br>
-	<br>
-	<div id="selectorFlex">
-		<div class="selector">
-			<label>Color:</label>
-			<select id="colorChooser">
-				<option value="red" selected>Red</option>
-				<option value="green">Green</option>
-				<option value="blue">Blue</option>
-				<option value="purple">Purple</option>
-				<option value="orange">Orange</option>
-				<option value="yellow">Yellow</option>
-				<option value="pink">Pink</option>
-				<option value="white">White</option>
-				<option value="rainbow">Rainbow</option>
-			</select>
-		</div>
-		<div class="selector">
-			<label>Zoom:</label>
-			<input type="range" min="10" max="50" value="10" class="slider" id="widthChooser">
-		</div>
-		<div class="selector">
-			<label>Speed:</label>
-			<input type="range" min="1" max="60" value="12" class="slider" id="speedChooser">
-		</div>
-		<div class="selector">
-			<label>Rainbow Color Change Speed:</label>
-			<input type="range" min="20" max="300" value="100" class="slider" id="colorSpeedChooser">
-		</div>
-	</div>
+	<header>
+		<h1>Game of Life</h1>
+		<h2>Drag to Scroll</h2>
+	</header>
+	<main>
+		<section>
+			<div id="parent">
+				<canvas></canvas>
+			</div>
+			<br>
+			<br>
+			<br>
+		</section>
+		<section>
+			<h1>Options</h1>
+			<div id="selectorFlex">
+				<div class="selector">
+					<label>Color:</label>
+					<select id="colorChooser">
+						<option value="red" selected>Red</option>
+						<option value="green">Green</option>
+						<option value="blue">Blue</option>
+						<option value="purple">Purple</option>
+						<option value="orange">Orange</option>
+						<option value="yellow">Yellow</option>
+						<option value="pink">Pink</option>
+						<option value="white">White</option>
+						<option value="rainbow">Party</option>
+					</select>
+				</div>
+				<div class="selector" id="colorspeed">
+					<label>Party Color Change Speed:</label>
+					<input type="range" min="10" max="300" value="100" class="slider" id="colorSpeedChooser">
+				</div>
+				<div class="selector">
+					<label>Shape:</label>
+					<select id="shapeChooser">
+						<option value="square" selected>Square</option>
+						<option value="circle">Circle</option>
+					</select>
+				</div>
+				<div class="selector">
+					<label>Zoom:</label>
+					<input type="range" min="10" max="50" value="10" class="slider" id="widthChooser">
+				</div>
+				<div class="selector">
+					<label>Speed:</label>
+					<input type="range" min="1" max="60" value="12" class="slider" id="speedChooser">
+				</div>
+				<div class="selector">
+					<label>Window Width:</label>
+					<input type="range" min="1" max="9" value="5" class="slider" id="hsizeChooser">
+				</div>
+				<div class="selector">
+					<label>Window Height:</label>
+					<input type="range" min="1" max="9" value="5" class="slider" id="vsizeChooser">
+				</div>
+				<div class="selector" id="pause">
+					<h2 id="pauseText">Pause</h2>
+				</div>
+				<div class="selector" id="reset">
+					<h2>Reset</h2>
+				</div>
+				<div class="selector">
+					<label>Percent Alive:</label>
+					<input type="range" min="0" max="10" value="1" class="slider" id="percentChooser">
+					<br>
+					<p>(Reset Required)</p>
+				</div>
+			</div>
+		</section>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<hr>
+		<section id="info">
+			<h2>Information</h2>
+			<p>John Horton Conway's Game of Life is a cellular automaton, or essentially a simulation taking place in a
+				grid of "cells", created in 1970. The goal of the simulation is to emulate the dvelopment of life in the
+				simplest way possible, by following a series of core rules:</p>
+			<ol>
+				<li>Any live cell with two or three neighbors survives</li>
+				<li>Any dead cell with three live neighbors becomes a live cell</li>
+				<li>All other live cells die in the next generation. Similarly, all other dead cells stay dead</li>
+			</ol>
+			<p>The purpose of this website is to give the user access to a much larger world with which to run the
+				simulation, and give them complete control as to how they view it. The simulation world actually extends
+				fairly far beyond the colored border, and more can be seen by clicking and dragging the canvas. I would
+				have loved to have made the world much bigger than it is but unfortunately the site's performance would
+				decrease drastically were it any bigger, and even at this site the performance can be spotty depending
+				on the resolution of your monitor. If you'd rather not scroll, the window itself can be made bigger with the window width and height controls.
+			</p>
+		</section>
+	</main>
 </body>
 
 </html>

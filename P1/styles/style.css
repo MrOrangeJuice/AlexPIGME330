@@ -13,13 +13,25 @@ h1 {
 	color: var(--border-color);
 }
 
+h2 {
+	color: var(--border-color);
+}
+
+p {
+	color: var(--border-color);
+}
+
+hr {
+	border: 2px solid var(--border-color);
+}
+
 canvas{
 	background-color: black;
 }
 
 #parent {
 	border: 5px solid var(--border-color);
-	width: 40%; 
+	width: 50%; 
 	height: 50vh;
 	margin: 0 auto; 
 	overflow: hidden
@@ -29,6 +41,8 @@ canvas{
 	display: flex;
 	justify-content: center;
 	flex-wrap: wrap;
+	width: 70%;
+	margin: 0 auto;
 }
 
 .selector {
@@ -48,4 +62,61 @@ canvas{
 
 .selector > input {
 	color: var(--border-color);
+}
+
+#colorspeed {
+	display: none;
+}
+
+#pause {
+	color: var(--border-color);
+}
+
+#pause:hover {
+	background-color: white;
+	cursor: pointer;
+}
+
+#reset {
+	color: var(--border-color);
+}
+
+#reset:hover {
+	background-color: white;
+	cursor: pointer;
+}
+
+#info {
+	width: 40%;
+	margin: 0 auto;
+	border: 2px solid white;
+}
+
+#info > p {
+	color: white;
+	padding: 2rem;
+}
+
+ol {
+	width: 80%;
+	margin: 0 auto;
+}
+
+li {
+	margin: 1rem;
+}
+
+/* Mobile Only Styles*/
+@media (max-width: 767px) {
+	#parent {
+		width: 90%;
+	}
+
+	#selectorFlex {
+		width: 90%;
+	}
+
+	#info {
+		width: 90%;
+	}
 }
