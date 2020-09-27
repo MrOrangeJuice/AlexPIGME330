@@ -14,26 +14,39 @@
 
 <body>
 	<h1>Game of Life</h1>
-	<canvas></canvas>
-	<br>
-	<br>
-	<br>
-	<div class="selector">
-		<label>Color:</label>
-		<select id="colorChooser">
-			<option value="red" selected>Red</option>
-			<option value="green">Green</option>
-			<option value="blue">Blue</option>
-			<option value="purple">Purple</option>
-			<option value="orange">Orange</option>
-			<option value="yellow">Yellow</option>
-			<option value="pink">Pink</option>
-			<option value="white">White</option>
-		</select>
+	<div id="parent">
+		<canvas></canvas>
 	</div>
-	<div class="selector">
-		<label>Zoom:</label>
-		<input type="range" min="5" max="50" value="10" class="slider" id="widthChooser">
+	<br>
+	<br>
+	<br>
+	<div id="selectorFlex">
+		<div class="selector">
+			<label>Color:</label>
+			<select id="colorChooser">
+				<option value="red" selected>Red</option>
+				<option value="green">Green</option>
+				<option value="blue">Blue</option>
+				<option value="purple">Purple</option>
+				<option value="orange">Orange</option>
+				<option value="yellow">Yellow</option>
+				<option value="pink">Pink</option>
+				<option value="white">White</option>
+				<option value="rainbow">Rainbow</option>
+			</select>
+		</div>
+		<div class="selector">
+			<label>Zoom:</label>
+			<input type="range" min="10" max="50" value="10" class="slider" id="widthChooser">
+		</div>
+		<div class="selector">
+			<label>Speed:</label>
+			<input type="range" min="1" max="60" value="12" class="slider" id="speedChooser">
+		</div>
+		<div class="selector">
+			<label>Rainbow Color Change Speed:</label>
+			<input type="range" min="20" max="300" value="100" class="slider" id="colorSpeedChooser">
+		</div>
 	</div>
 </body>
 

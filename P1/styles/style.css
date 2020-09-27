@@ -15,7 +15,20 @@ h1 {
 
 canvas{
 	background-color: black;
+}
+
+#parent {
 	border: 5px solid var(--border-color);
+	width: 40%; 
+	height: 50vh;
+	margin: 0 auto; 
+	overflow: hidden
+}
+
+#selectorFlex {
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
 }
 
 .selector {
