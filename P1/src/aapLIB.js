@@ -3,7 +3,6 @@
 
 	// Generate random color with max opacity
 	function getRandomColor(){
-		const getByte = _ => 55 + Math.round(Math.random() * 200);
 		return `rgba(${getByte()},${getByte()},${getByte()},1)`;
 	}
 
@@ -16,5 +15,9 @@
 		result.y = y;
 		return result;
 	}
-	window.aapLIB = {getRandomColor,mouse_position_xy};
+
+	function getByte() {
+		return 55 + Math.round(Math.random() * 200);
+	}
+	window.aapLIB = {getRandomColor,mouse_position_xy, getByte};
 }) ();
