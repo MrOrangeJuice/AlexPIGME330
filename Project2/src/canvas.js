@@ -9,7 +9,7 @@
 
 import * as utils from './utils.js';
 
-let ctx, canvasWidth, canvasHeight, gradient, analyserNode, audioData;
+let ctx, canvasWidth, canvasHeight, gradient, analyserNode, audioData, color, randomTimer, colorchangespeed;
 
 
 function setupCanvas(canvasElement, analyserNodeRef) {
@@ -38,6 +38,41 @@ function setupCanvas(canvasElement, analyserNodeRef) {
 	analyserNode = analyserNodeRef;
 	// this is the array where the analyser data will be stored
 	audioData = new Uint8Array(analyserNode.fftSize / 2);
+
+	let options = { 
+		video:true, 
+		audio:false 
+	}
+
+	randomTimer = 0;
+	colorchangespeed = 2;
+	color = utils.getRandomColor();
+
+	// Set up video
+	let videoElement = document.querySelector("#videoElement");
+	//request webcam access 
+	navigator.webkitGetUserMedia(options, 
+		function(stream) { 
+			//turn the stream into a magic URL 
+			//videoElement.src = window.webkitURL.createObjectURL(stream); 
+			videoElement.srcObject = stream; 
+		},
+		function(e) { 
+			console.log("error happened"); 
+			alert("You have navigator.webkitGetUserMedia, but an error occurred");
+		
+		} 
+	); 
+
+	/*
+	// Load the model.
+	handTrack.load().then(model => {
+		// detect objects in the image.
+		model.detect(videoElement).then(predictions => {
+			console.log('Predictions: ', predictions);
+		});
+	});
+	*/
 }
 
 function draw(params = {}) {
@@ -47,13 +82,18 @@ function draw(params = {}) {
 	// OR
 	//analyserNode.getByteTimeDomainData(audioData); // waveform data
 
+
+	// Clear canvas
+	ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
 	// 2 - draw background
 		ctx.save();
-		ctx.fillStyle = "rgba(0,0,0,0.5)";
+		ctx.fillStyle = "rgba(0,0,0,0)";
 		ctx.globalAlpha = .1;
 		ctx.fillRect(0,0,canvasWidth,canvasHeight);
 		ctx.restore();
 
+	/*
 	// 3 - draw gradient
 	if(params.showGradient)
 	{
@@ -63,6 +103,7 @@ function draw(params = {}) {
 		ctx.fillRect(0,0,canvasWidth,canvasHeight);
 		ctx.restore();
 	}
+	*/
 
 	// 4 - draw bars
 	if(params.showBars) {
@@ -74,7 +115,7 @@ function draw(params = {}) {
 		let topSpacing = 100;
 
 		ctx.save();
-		ctx.fillStyle = 'rgba(255,255,255,0.50)';
+		ctx.fillStyle = color;
 		ctx.strokeStyle = 'rgba(0,0,0,0.50)';
 		// loop through the data and draw!
 		for (let i=0; i < audioData.length; i++) {
@@ -94,13 +135,13 @@ function draw(params = {}) {
 
 			let circleRadius = percent * maxRadius;
 			ctx.beginPath();
-			ctx.fillStyle = utils.makeColor(255,111,111, .34 - percent/3.0);
+			ctx.fillStyle = utils.makeColor(255,111,111, .34 - percent/1.0);
 			ctx.arc(canvasWidth/2, canvasHeight/2, circleRadius, 0, 2 * Math.PI, false);
 			ctx.fill();
 			ctx.closePath();
 
 			ctx.beginPath();
-			ctx.fillStyle = utils.makeColor(0, 0, 255, .10 - percent/10.0);
+			ctx.fillStyle = utils.makeColor(0, 255, 0, .10 - percent/10.0);
 			ctx.arc(canvasWidth/2, canvasHeight/2, circleRadius * 1.5, 0, 2 * Math.PI, false);
 			ctx.fill();
 			ctx.closePath();
@@ -156,6 +197,19 @@ function draw(params = {}) {
 			if (i%4 == 3) continue;
 			data[i] = 127 + 2*data[i] - data[i+4] - data [i + width * 4];
 		}
+	}
+	// Draw video
+	ctx.drawImage(videoElement, 0, 0, 800, 400);
+	// Pick new color for bars
+	if(randomTimer <= 0)
+	{
+		let newColor = utils.getRandomColor();
+		color = newColor;
+		randomTimer = 100 / colorchangespeed;
+	}
+	else
+	{
+		randomTimer--;
 	}
 	
 	// D) copy image data back to canvas

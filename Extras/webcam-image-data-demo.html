@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Video</title>
+	<style type="text/css">
+		body{
+			font-family: verdana, sans-serif;
+		}
+		canvas{
+			background-color: green;
+			width: 640px;
+			height: 480px;
+			position:absolute;
+			top:5px;
+			left: 5px;
+		}
+		input[type='checkbox']{
+			margin-left:2em;
+		}
+		
+		video{
+			width: 640px;
+			height: 480px;
+			position:absolute;
+			top:5px;
+			left: 5px;
+		}
+		
+		#controls{
+			position:absolute;
+			top:500px;
+			left: 5px;
+		}
+	</style>
+	<script>
+	// http://stackoverflow.com/questions/667519/firefox-setting-to-enable-cross-domain-ajax-request
+	// http://www.techrepublic.com/blog/how-do-i/how-do-i-convert-images-to-grayscale-and-sepia-tone-using-c/#.
+	// http://stackoverflow.com/questions/1061093/how-is-a-sepia-tone-created
+	// http://html5doctor.com/video-canvas-magic/
+	//https://archive.org/details/Lectures_on_Image_Processing
+	//http://stackoverflow.com/questions/13932855/canvas-flip-half-the-image
+	// http://www.html5rocks.com/en/tutorials/canvas/imagefilters/#toc-setup
+	// http://lodev.org/cgtutor/filtering.html
+	
+	
+	"use strict";
+	// IFFY
+	(function(){
+		window.onload = init;
+		let canvasElement, ctx, videoElement, w, h;
+		
+		function init(){
+			canvasElement = document.querySelector('canvas'); 
+			ctx = canvasElement.getContext('2d');
+			videoElement = document.querySelector('video'); 
+			w = videoElement.clientWidth;
+			h = videoElement.clientHeight;
+			canvasElement.width = w; 
+			canvasElement.height = h;
+			if(navigator.webkitGetUserMedia!=null) { 
+			let options = { 
+				video:true, 
+				audio:false 
+			}; 
+			 
+			//request webcam access 
+			navigator.webkitGetUserMedia(options, 
+				function(stream) { 
+					//turn the stream into a magic URL 
+					//videoElement.src = window.webkitURL.createObjectURL(stream); 
+					videoElement.srcObject = stream; 
+				},
+				function(e) { 
+					console.log("error happened"); 
+					alert("You have navigator.webkitGetUserMedia, but an error occurred");
+				
+				} 
+			); 
+		} 
+			
+			
+			drawEffect();
+		}
+	
+	
+		
+		
+		
+		function drawEffect() { 
+			requestAnimationFrame(drawEffect);
+			
+			// FIXME: checking DOM elements 60FPS - not ideal!
+			let invert = document.querySelector('#invert').checked;
+			let desaturate = document.querySelector('#desaturate').checked;
+			let sepia = document.querySelector('#sepia').checked;
+			let tint = document.querySelector('#tint').checked;
+			let tintcolor = +document.querySelector('#tintcolor').value; 
+			let noise = document.querySelector('#noise').checked;
+			let shiftrgb = document.querySelector('#shiftrgb').checked;
+			let emboss = document.querySelector('#emboss').checked;
+			
+			ctx.drawImage(videoElement, 0, 0, w, h);
+			let imageData = ctx.getImageData(0, 0, w, h);
+			
+			let data = imageData.data;
+			let length = data.length;
+			let width = imageData.width;
+	
+			
+			// emboss
+			if (emboss){
+				// Loop through the subpixels, convoluting each using an edge-detection matrix.
+				for(let i = 0; i < length; i++) {
+					if( i%4 == 3 ) continue;
+					data[i] = 127 + 2*data[i] - data[i + 4] - data[i + width*4];
+				}
+			}
+				
+			
+			// Iterate through each pixel, inverting it
+			for (let i = 0; i < length; i +=4) {
+				
+				// invert
+				if(invert){
+					let red = data[i], green = data[i+1], blue = data[i+2];
+					data[i] = 255 - red;  		// set red value
+					data[i+1] = 255 - green;  		// set blue value
+					data[i+2] = 255 - blue;		// set green value
+					// date[i+3] is the alpha but we’re leaving that alone
+				}
+
+				
+				
+				// desaturate
+				if(desaturate){
+					let red = data[i], green = data[i+1], blue = data[i+2];
+					// var v = (red + green + blue)/3;
+					// weighted average
+					let v = red*0.21 + green*0.71 + blue*0.07;  
+					data[i]   = v; 
+					data[i+1] = v; 
+					data[i+2] = v; 
+				}
+				
+				if(sepia){
+					let red = data[i], green = data[i+1], blue = data[i+2];
+					data[i]  = (red * .393) + (green *.769) + (blue * .189);
+					data[i + 1] = (red * .349) + (green *.686) + (blue * .168);
+					data[i + 2] = (red * .272) + (green *.534) + (blue * .131);
+				}
+				
+				
+				// shift red/green/blue
+				if(shiftrgb){
+					let red = data[i], green = data[i+1], blue = data[i+2];
+					data[i] = green 
+					data[i+1] = blue; 
+					data[i+2] = red;
+				}
+				
+				// noise
+				if  (noise && Math.random() < .1){
+					data[i] = data[i +1] = data[i+2] = 0;
+				}
+				
+				// tint
+				if(tint){
+					data[i + tintcolor] = data[i + tintcolor] + 30;  
+				}
+				
+				
+
+			}
+			
+			ctx.putImageData(imageData, 0, 0);
+
+			
+		}
+	}());
+	</script>
+</head>
+<body>
+<video autoplay>
+	Go get an HTML5 Browser!
+</video>
+
+<canvas>
+	Really, go get an HTML5 Browser!
+</canvas>
+<div id="controls">
+	<p>
+		<input id="invert" type="checkbox"> Invert <input id="desaturate" type="checkbox"> Desaturate <input id="sepia" type="checkbox"> Sepia 
+	</p>
+	
+	<p>
+		<input id="tint" type="checkbox"> Tint 
+		<select id="tintcolor">
+			<option value="0">Red</option>
+			<option value="1" selected>Green</option>
+			<option value="2">Blue</option>
+		</select>
+		<input id="noise" type="checkbox"> Noise <input id="shiftrgb" type="checkbox"> Shift RGB
+	</p>
+	
+	<p>
+		<input id="emboss" type="checkbox"> Emboss
+	</p>
+	
+	<h2>Running this demo</h2>
+	<p>This demo only runs in Chrome. If you run this demo on your local computer using Chrome you will get a "<code>Uncaught SecurityError: Failed to execute 'getImageData' on 'CanvasRenderingContext2D': the canvas has been tainted by cross-origin data.</code>" message in the console and the canvas won't update. This means that the <code>context.getImageData()</code> needs to run off of a web server.</p>
+	<p>Solution - Post this HTML file to a web server.</p>
+</div>
+
+</body>
+</html>
