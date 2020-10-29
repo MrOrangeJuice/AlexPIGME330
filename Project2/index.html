@@ -1,53 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="utf-8" />
-	<title>Hand Tracking Audio Visualizer</title>
+	<title>Head Tracking Audio Visualizer</title>
 	<link href="styles/default-styles.css" type="text/css" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 	<script src="./src/loader.js" type="module"></script>
-	<script src="https://cdn.jsdelivr.net/npm/handtrackjs/dist/handtrack.min.js"> </script>
+	<script src="./src/headtrackr.js"></script>
 </head>
-<body>
-<main>
-	<h1>Hand Tracking Audio Visualizer</h1>
-	<div id="container">
-		<video autoplay="true" id="videoElement"></video>
-		<canvas width="800" height="400"></canvas>
-	</div>
-	<div id="controls">
-		<section>
-			<button id="playButton" data-playing="no"></button>
-			<button id="fsButton">Full Screen</button>
-		
-			<label>Track: 
-				<select id="trackSelect">
-					<option value="media/New Adventure Theme.mp3" selected>New Adventure Theme</option>
-					<option value="media/Peanuts Theme.mp3">Peanuts Theme</option>
-					<option value="media/The Picard Song.mp3">The Picard Song</option>
-				</select>
-			</label>
-		</section>
-		
-		<section>
-			Volume: <input type="range" id="volumeSlider" min="0" max="2" value="1" step="0.01">
-			<span id="volumeLabel">???</span>
-			<!--
-			<br>
-			<br>
-			Color Change Speed: <input type="range" id="colorChange" min="0" max="10" step="1">
-			-->
-		</section>
 
-		<section>
-			<!--<span><input type="checkbox" id="gradientCB" checked="true"><label for="gradientCB">Show Gradient</label></span>-->
-			<span><input type="checkbox" id="barsCB" checked="true"><label for="barsCB">Show Bars</label></span>
-			<span><input type="checkbox" id="circlesCB" checked="true"><label for="circlesCB">Show Circles</label></span>
-			<!-- we'll use this 4th checkbox soon! -->
-			<span><input type="checkbox" id="noiseCB"><label for="noiseCB">Show Noise</label></span>
-			<span><input type="checkbox" id="invertCB"><label for="invertCB">Invert Colors</label></span>
-			<span><input type="checkbox" id="embossCB"><label for="embossCB">Show Emboss</label></span>
-		  </section>
-	</div>
-</main>
+<body>
+	<main>
+		<h1>Head Tracking Audio Visualizer</h1>
+		<div id="container">
+			<video autoplay="true" id="videoElement"></video>
+			<canvas width="800" height="400" id="canvasElement"></canvas>
+		</div>
+		<div id="controls">
+			<section>
+				<button id="playButton" data-playing="no"></button>
+				<button id="fsButton">Full Screen</button>
+
+				<label>Track:
+					<select id="trackSelect">
+						<option value="media/Back 2 Back.mp3" selected>Back 2 Back</option>
+						<option value="media/Door Into Summer.mp3">Door Into Summer</option>
+						<option value="media/Rude Buster.mp3">Rude Buster</option>
+					</select>
+				</label>
+				<div id="progress"></div>
+			</section>
+
+			<section>
+				Volume: <input type="range" id="volumeSlider" min="0" max="2" value="1" step="0.01">
+				<span id="volumeLabel">???</span>
+				<br>
+				<br>
+				Color Change Speed: <input type="range" id="colorChange" min="1" max="10" value="5" step="1">
+				<span id="colorLabel">???</span>
+				<br>
+				<br>
+			</section>
+
+			<section>
+				Circle Color:
+				<br>
+				<input type="radio" id="red" name="circleColor" value="red" checked>
+				<label for="red">Red</label><br>
+				<input type="radio" id="green" name="circleColor" value="green">
+				<label for="green">Green</label><br>
+				<input type="radio" id="blue" name="circleColor" value="blue">
+				<label for="blue">Blue</label>
+				<br>
+				<input type="radio" id="yellow" name="circleColor" value="yellow">
+				<label for="yellow">Yellow</label>
+				<br>
+				<input type="radio" id="purple" name="circleColor" value="purple">
+				<label for="purple">Purple</label>
+			</section>
+
+			<section>
+				<!--<span><input type="checkbox" id="gradientCB" checked="true"><label for="gradientCB">Show Gradient</label></span>-->
+				<span><input type="checkbox" id="barsCB" checked="true"><label for="barsCB">Show Bars</label></span>
+				<span><input type="checkbox" id="circlesCB" checked="true"><label for="circlesCB">Show
+						Circles</label></span>
+				<span><input type="checkbox" id="noiseCB"><label for="noiseCB">Show Noise</label></span>
+				<span><input type="checkbox" id="invertCB"><label for="invertCB">Invert Colors</label></span>
+				<span><input type="checkbox" id="embossCB"><label for="embossCB">Show Emboss</label></span>
+			</section>
+
+			<div id="outputDiv"></div>
+
+			<script type="text/javascript">
+				// "Iffy"
+				(function () {
+					init();
+
+					function init() {
+						var videoInput = document.getElementById('videoElement');
+						var canvasInput = document.getElementById('canvasElement');
+						var outputDiv = document.querySelector('#outputDiv');
+						var htracker = new headtrackr.Tracker();
+						document.addEventListener('headtrackingEvent', doHeadTrackingEvent);
+						htracker.init(videoInput, canvasInput);
+						htracker.start();
+					}
+
+					function doHeadTrackingEvent(e) {
+						let x = e.x.toFixed(2),
+							y = e.y.toFixed(2),
+							z = e.z.toFixed(2);
+						let s = "<p>x=";
+						s += x;
+						s += ", y=";
+						s += y;
+						s += ", z=";
+						s += z;
+						outputDiv.innerHTML = s;
+					}
+
+
+				}());
+			</script>
+		</div>
+	</main>
 </body>
+
 </html>

@@ -1,15 +1,6 @@
-/*
-	The purpose of this file is to take in the analyser node and a <canvas> element: 
-	  - the module will create a drawing context that points at the <canvas> 
-	  - it will store the reference to the analyser node
-	  - in draw(), it will loop through the data in the analyser node
-	  - and then draw something representative on the canvas
-	  - maybe a better name for this file/module would be *visualizer.js* ?
-*/
-
 import * as utils from './utils.js';
 
-let ctx, canvasWidth, canvasHeight, gradient, analyserNode, audioData, color, randomTimer, colorchangespeed;
+let ctx, canvasWidth, canvasHeight, gradient, analyserNode, audioData, color, randomTimer;
 
 
 function setupCanvas(canvasElement, analyserNodeRef) {
@@ -45,7 +36,6 @@ function setupCanvas(canvasElement, analyserNodeRef) {
 	}
 
 	randomTimer = 0;
-	colorchangespeed = 2;
 	color = utils.getRandomColor();
 
 	// Set up video
@@ -63,55 +53,33 @@ function setupCanvas(canvasElement, analyserNodeRef) {
 		
 		} 
 	); 
-
-	/*
-	// Load the model.
-	handTrack.load().then(model => {
-		// detect objects in the image.
-		model.detect(videoElement).then(predictions => {
-			console.log('Predictions: ', predictions);
-		});
-	});
-	*/
 }
 
 function draw(params = {}) {
 	// 1 - populate the audioData array with the frequency data from the analyserNode
 	// notice these arrays are passed "by reference" 
 	analyserNode.getByteFrequencyData(audioData);
-	// OR
-	//analyserNode.getByteTimeDomainData(audioData); // waveform data
+
+	// waveform data
 
 
 	// Clear canvas
 	ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
-	// 2 - draw background
+	// draw background
 		ctx.save();
 		ctx.fillStyle = "rgba(0,0,0,0)";
 		ctx.globalAlpha = .1;
 		ctx.fillRect(0,0,canvasWidth,canvasHeight);
 		ctx.restore();
 
-	/*
-	// 3 - draw gradient
-	if(params.showGradient)
-	{
-		ctx.save();
-		ctx.fillStyle = gradient;
-		ctx.globalAlpha = .3;
-		ctx.fillRect(0,0,canvasWidth,canvasHeight);
-		ctx.restore();
-	}
-	*/
-
-	// 4 - draw bars
+	// draw bars
 	if(params.showBars) {
 		let barSpacing = 4;
 		let margin = 5; 
 		let screenWidthForBars = canvasWidth - (audioData.length * barSpacing) - margin * 2;
 		let barWidth = screenWidthForBars / audioData.length;
-		let barHeight = 200;
+		let barHeight = 300;
 		let topSpacing = 100;
 
 		ctx.save();
@@ -125,7 +93,7 @@ function draw(params = {}) {
 		ctx.restore();
 	}
 
-	// 5 - draw circles
+	// draw circles
 	if (params.showCircles){
 		let maxRadius = canvasHeight/4;
 		ctx.save();
@@ -141,13 +109,33 @@ function draw(params = {}) {
 			ctx.closePath();
 
 			ctx.beginPath();
-			ctx.fillStyle = utils.makeColor(0, 255, 0, .10 - percent/10.0);
+			// Pick circle color based on parameters
+			if(params.circleColor == "red")
+			{
+				ctx.fillStyle = utils.makeColor(255, 0, 0, .10 - percent/10.0);
+			}
+			if(params.circleColor == "green")
+			{
+				ctx.fillStyle = utils.makeColor(0, 255, 0, .10 - percent/10.0);
+			}
+			if(params.circleColor == "blue")
+			{
+				ctx.fillStyle = utils.makeColor(0, 0, 255, .10 - percent/10.0);
+			}
+			if(params.circleColor == "yellow")
+			{
+				ctx.fillStyle = utils.makeColor(255, 255, 0, .10 - percent/10.0);
+			}
+			if(params.circleColor == "purple")
+			{
+				ctx.fillStyle = utils.makeColor(255, 0, 255, .10 - percent/10.0);
+			}
 			ctx.arc(canvasWidth/2, canvasHeight/2, circleRadius * 1.5, 0, 2 * Math.PI, false);
 			ctx.fill();
 			ctx.closePath();
 
 			ctx.beginPath();
-			ctx.fillStyle = utils.makeColor(200, 200, 0, .5 - percent/5.0);
+			ctx.fillStyle = utils.getRandomColor();
 			ctx.arc(canvasWidth/2, canvasHeight/2, circleRadius * .50, 0, 2 * Math.PI, false);
 			ctx.fill();
 			ctx.closePath();
@@ -205,13 +193,13 @@ function draw(params = {}) {
 	{
 		let newColor = utils.getRandomColor();
 		color = newColor;
-		randomTimer = 100 / colorchangespeed;
+		randomTimer = 100 / params.colorChangeSpeed;
 	}
 	else
 	{
 		randomTimer--;
 	}
-	
+
 	// D) copy image data back to canvas
 	ctx.putImageData(imageData, 0, 0);
 }

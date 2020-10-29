@@ -1,54 +1,36 @@
-/*
-	main.js is primarily responsible for hooking up the UI to the rest of the application 
-	and setting up the main event loop
-*/
-
-// We will write the functions in this file in the traditional ES5 way
-// In this instance, we feel the code is more readable if written this way
-// If you want to re-write these as ES6 arrow functions, to be consistent with the other files, go ahead!
-
 import * as utils from './utils.js';
 import * as audio from './audio.js';
 import * as canvas from './canvas.js';
 
+// Parameters for canvas
 const drawParams = {
 	showGradient: true,
 	showBars: true,
 	showCircles: true,
 	showNoise: false,
 	showInvert: false,
-	showEmboss: false
-};
-
-const modelParams = {
-	flipHorizontal: true,   // flip e.g for video 
-	imageScaleFactor: 0.7,  // reduce input image size for gains in speed.
-	maxNumBoxes: 20,        // maximum number of boxes to detect
-	iouThreshold: 0.5,      // ioU threshold for non-max suppression
-	scoreThreshold: 0.79,    // confidence threshold for predictions.
+	showEmboss: false,
+	colorChangeSpeed: document.querySelector("#colorChange").value,
+	circleColor: "red",
 };
 
 // 1 - here we are faking an enumeration
 const DEFAULTS = Object.freeze({
-	sound1: "media/New Adventure Theme.mp3"
+	sound1: "media/Back 2 Back.mp3"
 });
 
 function init() {
 	audio.setupWebaudio(DEFAULTS.sound1);
-	console.log("init called");
-	console.log(`Testing utils.getRandomColor() import: ${utils.getRandomColor()}`);
-	handTrack.load(modelParams).then(model => {
-
-	});
-	
 	let canvasElement = document.querySelector("canvas"); // hookup <canvas> element
+	let videoElement = document.querySelector("#videoElement");
+	let outputDiv = document.querySelector('#outputDiv');
 	setupUI(canvasElement);
 	canvas.setupCanvas(canvasElement, audio.analyserNode);
 	loop();
 }
 
 function setupUI(canvasElement) {
-	// A - hookup fullscreen button
+	// fullscreen button
 	const fsButton = document.querySelector("#fsButton");
 	
 	// add .onclick event to button
@@ -56,18 +38,6 @@ function setupUI(canvasElement) {
 		console.log("init called");
 		utils.goFullscreen(canvasElement);
 	};
-
-	/*
-	const gradientCB = document.querySelector("#gradientCB");
-	gradientCB.onchange = e => {
-		if(gradientCB.checked == true){
-			drawParams.showGradient = true;
-		}
-		else {
-			drawParams.showGradient = false;
-		}
-	}
-	*/
 
 	const barsCB = document.querySelector("#barsCB");
 	barsCB.onchange = e => {
@@ -144,6 +114,26 @@ function setupUI(canvasElement) {
 
 	volumeSlider.dispatchEvent(new Event("input"));
 
+	let colorSpeedSlider = document.querySelector("#colorChange");
+	let colorSpeedLabel = document.querySelector("#colorLabel");
+
+	colorSpeedSlider.oninput = e => {
+		drawParams.colorChangeSpeed = e.target.value;
+		colorSpeedLabel.innerHTML = e.target.value;
+	}
+
+	// Determine circle color from radio buttons
+	let colorRadio = document.querySelectorAll("input[type=radio][name=circleColor]");
+	for (let c of colorRadio)
+	{
+		c.onchange = function (e) {
+			drawParams.circleColor = e.target.value;
+			console.log(drawParams.circleColor);
+		}
+	}
+
+	colorSpeedSlider.dispatchEvent(new Event("input"));
+
 	let trackSelect = document.querySelector("#trackSelect");
 
 	trackSelect.onchange = e => {
@@ -157,7 +147,36 @@ function setupUI(canvasElement) {
 
 function loop() {
 	requestAnimationFrame(loop);
+	// Progress Bar
+	let currentTime = audio.element.currentTime;
+	let duration = audio.element.duration;
+	document.querySelector("#progress").innerHTML = sec2time(Math.round(currentTime)) + "/" + sec2time(Math.round(duration));
 	canvas.draw(drawParams);
+}
+
+// From vankasteelj on GitHub
+function sec2time(timeInSeconds) {
+    var pad = function(num, size) { return ('000' + num).slice(size * -1); },
+    time = parseFloat(timeInSeconds).toFixed(3),
+    hours = Math.floor(time / 60 / 60),
+    minutes = Math.floor(time / 60) % 60,
+    seconds = Math.floor(time - minutes * 60),
+    milliseconds = time.slice(-3);
+
+    return pad(minutes, 2) + ':' + pad(seconds, 2);
+}
+
+function doHeadTrackingEvent(e) {
+	var x = e.x.toFixed(2),
+		y = e.y.toFixed(2),
+		z = e.z.toFixed(2);
+	var s = "<p>x=";
+	s += x;
+	s += ", y=";
+	s += y;
+	s += ", z=";
+	s += z;
+	outputDiv.innerHTML = s;
 }
 
 export {

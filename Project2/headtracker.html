@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<title>headtrackr</title>
+	<style type="text/css">
+		video {
+			-webkit-transform: scaleX(-1);
+			transform: scaleX(-1);
+		}
+	</style>
+
+
+	<script src="src/headtrackr.js"></script>
+</head>
+
+<body>
+	<!-- this canvas is invisible and is only being used to get the pixel data of the video -->
+	<canvas id="inputCanvas" width="320" height="240" style="display:none"></canvas>
+
+	<!-- the <video> default size is 320x240 -->
+	<video id="inputVideo" autoplay loop></video>
+
+	<div id="outputDiv"></div>
+
+	<script type="text/javascript">
+		// "Iffy"
+		(function () {
+			init();
+
+			function init() {
+				var videoInput = document.getElementById('inputVideo');
+				var canvasInput = document.getElementById('inputCanvas');
+				var outputDiv = document.querySelector('#outputDiv');
+				var htracker = new headtrackr.Tracker();
+				document.addEventListener('headtrackingEvent', doHeadTrackingEvent);
+				htracker.init(videoInput, canvasInput);
+				htracker.start();
+			}
+
+			function doHeadTrackingEvent(e) {
+				var x = e.x.toFixed(2),
+					y = e.y.toFixed(2),
+					z = e.z.toFixed(2);
+				var s = "<p>x=";
+				s += x;
+				s += ", y=";
+				s += y;
+				s += ", z=";
+				s += z;
+				outputDiv.innerHTML = s;
+			}
+
+
+		}());
+	</script>
+</body>
+
+</html>

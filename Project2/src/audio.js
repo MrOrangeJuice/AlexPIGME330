@@ -73,6 +73,6 @@ function setVolume(value) {
 	gainNode.gain.value = value;
 }
 
-export {audioCtx,setupWebaudio,playCurrentSound,pauseCurrentSound,loadSoundFile,setVolume,analyserNode};
+export {audioCtx,setupWebaudio,element,playCurrentSound,pauseCurrentSound,loadSoundFile,setVolume,analyserNode};
 
 // make sure that it's a Number rather than a String
