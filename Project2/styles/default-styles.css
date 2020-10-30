@@ -8,6 +8,14 @@ h1 {
 	text-align: center;
 }
 
+h3 {
+	text-align: center;
+}
+
+footer {
+	text-align: center;
+}
+
 button {
 	background-color: black;
 	border: 2px solid white;

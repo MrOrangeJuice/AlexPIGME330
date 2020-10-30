@@ -10,9 +10,17 @@ const drawParams = {
 	showNoise: false,
 	showInvert: false,
 	showEmboss: false,
+	deadmau5: false,
 	colorChangeSpeed: document.querySelector("#colorChange").value,
-	circleColor: "red",
+	barHeight: document.querySelector("#barChange").value,
+	circleColor: "red"
 };
+
+let headParams = {
+	x: 0,
+	y: 0,
+	z: 0
+}
 
 // 1 - here we are faking an enumeration
 const DEFAULTS = Object.freeze({
@@ -24,6 +32,10 @@ function init() {
 	let canvasElement = document.querySelector("canvas"); // hookup <canvas> element
 	let videoElement = document.querySelector("#videoElement");
 	let outputDiv = document.querySelector('#outputDiv');
+	let htracker = new headtrackr.Tracker();
+	document.addEventListener('headtrackingEvent', doHeadTrackingEvent);
+	htracker.init(videoElement, canvasElement);
+	htracker.start();
 	setupUI(canvasElement);
 	canvas.setupCanvas(canvasElement, audio.analyserNode);
 	loop();
@@ -38,6 +50,16 @@ function setupUI(canvasElement) {
 		console.log("init called");
 		utils.goFullscreen(canvasElement);
 	};
+
+	const dm = document.querySelector("#deadmau5");
+	dm.onchange = e => {
+		if(dm.checked == true){
+			drawParams.deadmau5 = true;
+		}
+		else {
+			drawParams.deadmau5 = false;
+		}
+	}
 
 	const barsCB = document.querySelector("#barsCB");
 	barsCB.onchange = e => {
@@ -121,6 +143,16 @@ function setupUI(canvasElement) {
 		drawParams.colorChangeSpeed = e.target.value;
 		colorSpeedLabel.innerHTML = e.target.value;
 	}
+	
+	let barHeightSlider = document.querySelector("#barChange");
+	let barHeightLabel = document.querySelector("#barLabel");
+
+	barHeightSlider.oninput = e => {
+		drawParams.barHeight = e.target.value;
+		barLabel.innerHTML = e.target.value;
+	}
+
+	barHeightSlider.dispatchEvent(new Event("input"));
 
 	// Determine circle color from radio buttons
 	let colorRadio = document.querySelectorAll("input[type=radio][name=circleColor]");
@@ -151,7 +183,8 @@ function loop() {
 	let currentTime = audio.element.currentTime;
 	let duration = audio.element.duration;
 	document.querySelector("#progress").innerHTML = sec2time(Math.round(currentTime)) + "/" + sec2time(Math.round(duration));
-	canvas.draw(drawParams);
+
+	canvas.draw(drawParams, headParams);
 }
 
 // From vankasteelj on GitHub
@@ -167,15 +200,15 @@ function sec2time(timeInSeconds) {
 }
 
 function doHeadTrackingEvent(e) {
-	var x = e.x.toFixed(2),
-		y = e.y.toFixed(2),
-		z = e.z.toFixed(2);
+	headParams.x = e.x,
+	headParams.y = e.y,
+	headParams.z = e.z;
 	var s = "<p>x=";
-	s += x;
+	s += headParams.x.toFixed(2);
 	s += ", y=";
-	s += y;
+	s += headParams.y.toFixed(2);
 	s += ", z=";
-	s += z;
+	s += headParams.z.toFixed(2);
 	outputDiv.innerHTML = s;
 }
 

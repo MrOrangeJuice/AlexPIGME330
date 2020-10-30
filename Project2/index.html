@@ -12,7 +12,10 @@
 
 <body>
 	<main>
+		<header>
 		<h1>Head Tracking Audio Visualizer</h1>
+		<h3>If the tracking's having issues try reloading the page!</h3>
+		</header>
 		<div id="container">
 			<video autoplay="true" id="videoElement"></video>
 			<canvas width="800" height="400" id="canvasElement"></canvas>
@@ -41,6 +44,8 @@
 				<span id="colorLabel">???</span>
 				<br>
 				<br>
+				Bar Length: <input type="range" id="barChange" min="1" max="5" value="2" step="1">
+				<span id="barLabel">???</span>
 			</section>
 
 			<section>
@@ -61,49 +66,27 @@
 			</section>
 
 			<section>
-				<!--<span><input type="checkbox" id="gradientCB" checked="true"><label for="gradientCB">Show Gradient</label></span>-->
+				<span><input type="checkbox" id="deadmau5"><label for="deadmau5">Deadmau5 Mode</label></span>
 				<span><input type="checkbox" id="barsCB" checked="true"><label for="barsCB">Show Bars</label></span>
 				<span><input type="checkbox" id="circlesCB" checked="true"><label for="circlesCB">Show
 						Circles</label></span>
+						
+				<br>
+				<br>
 				<span><input type="checkbox" id="noiseCB"><label for="noiseCB">Show Noise</label></span>
 				<span><input type="checkbox" id="invertCB"><label for="invertCB">Invert Colors</label></span>
 				<span><input type="checkbox" id="embossCB"><label for="embossCB">Show Emboss</label></span>
 			</section>
 
+			<p>Head Tracking Info:</p>
 			<div id="outputDiv"></div>
-
-			<script type="text/javascript">
-				// "Iffy"
-				(function () {
-					init();
-
-					function init() {
-						var videoInput = document.getElementById('videoElement');
-						var canvasInput = document.getElementById('canvasElement');
-						var outputDiv = document.querySelector('#outputDiv');
-						var htracker = new headtrackr.Tracker();
-						document.addEventListener('headtrackingEvent', doHeadTrackingEvent);
-						htracker.init(videoInput, canvasInput);
-						htracker.start();
-					}
-
-					function doHeadTrackingEvent(e) {
-						let x = e.x.toFixed(2),
-							y = e.y.toFixed(2),
-							z = e.z.toFixed(2);
-						let s = "<p>x=";
-						s += x;
-						s += ", y=";
-						s += y;
-						s += ", z=";
-						s += z;
-						outputDiv.innerHTML = s;
-					}
-
-
-				}());
-			</script>
 		</div>
+		<br>
+		<br>
+		<br>
+		<footer>
+			<small>App by Alex Parrotto</small>
+		</footer>
 	</main>
 </body>
 

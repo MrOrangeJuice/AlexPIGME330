@@ -55,7 +55,7 @@ function setupCanvas(canvasElement, analyserNodeRef) {
 	); 
 }
 
-function draw(params = {}) {
+function draw(params = {}, headParams = {}) {
 	// 1 - populate the audioData array with the frequency data from the analyserNode
 	// notice these arrays are passed "by reference" 
 	analyserNode.getByteFrequencyData(audioData);
@@ -87,8 +87,8 @@ function draw(params = {}) {
 		ctx.strokeStyle = 'rgba(0,0,0,0.50)';
 		// loop through the data and draw!
 		for (let i=0; i < audioData.length; i++) {
-			ctx.fillRect(margin + i * (barWidth + barSpacing), topSpacing + 256-audioData[i],barWidth,barHeight);
-			ctx.strokeRect(margin + i * (barWidth + barSpacing), topSpacing + 256-audioData[i],barWidth,barHeight);
+			ctx.fillRect(margin + i * (barWidth + barSpacing), topSpacing + 256-audioData[i],barWidth,(params.barHeight * 100));
+			ctx.strokeRect(margin + i * (barWidth + barSpacing), topSpacing + 256-audioData[i],barWidth,(params.barHeight * 100));
 		}
 		ctx.restore();
 	}
@@ -98,15 +98,19 @@ function draw(params = {}) {
 		let maxRadius = canvasHeight/4;
 		ctx.save();
 		ctx.globalAlpha = 0.5;
+		let offsetx = -(headParams.x * 6) + 400;
+		let offsety = -(headParams.y * 6) + 250;
 		for(let i=0; i < audioData.length; i++) {
 			let percent = audioData[i] / 255;
 
 			let circleRadius = percent * maxRadius;
-			ctx.beginPath();
-			ctx.fillStyle = utils.makeColor(255,111,111, .34 - percent/1.0);
-			ctx.arc(canvasWidth/2, canvasHeight/2, circleRadius, 0, 2 * Math.PI, false);
-			ctx.fill();
-			ctx.closePath();
+			if(!params.deadmau5) {
+				ctx.beginPath();
+				ctx.fillStyle = utils.makeColor(255,111,111, .34 - percent/1.0);
+				ctx.arc(offsetx, offsety, circleRadius, 0, 2 * Math.PI, false);
+				ctx.fill();
+				ctx.closePath();
+			}
 
 			ctx.beginPath();
 			// Pick circle color based on parameters
@@ -130,16 +134,37 @@ function draw(params = {}) {
 			{
 				ctx.fillStyle = utils.makeColor(255, 0, 255, .10 - percent/10.0);
 			}
-			ctx.arc(canvasWidth/2, canvasHeight/2, circleRadius * 1.5, 0, 2 * Math.PI, false);
+			ctx.arc(offsetx, offsety, circleRadius * 1.5, 0, 2 * Math.PI, false);
 			ctx.fill();
 			ctx.closePath();
 
-			ctx.beginPath();
-			ctx.fillStyle = utils.getRandomColor();
-			ctx.arc(canvasWidth/2, canvasHeight/2, circleRadius * .50, 0, 2 * Math.PI, false);
-			ctx.fill();
-			ctx.closePath();
-			ctx.restore();
+			if(params.deadmau5) {
+				// Draw mouse ears
+				ctx.beginPath();
+				ctx.arc(offsetx - 75, offsety - 75, circleRadius * 0.5, 0, 2 * Math.PI, false);
+				ctx.fill();
+				ctx.closePath();
+	
+				ctx.beginPath();
+				ctx.arc(offsetx + 75, offsety - 75, circleRadius * 0.5, 0, 2 * Math.PI, false);
+				ctx.fill();
+				ctx.closePath();
+
+				// Draw mouse eyes
+				ctx.beginPath();
+				ctx.fillStyle = utils.getRandomColor();
+				ctx.arc(offsetx - 50, offsety - 25, circleRadius * .50, 0, 2 * Math.PI, false);
+				ctx.arc(offsetx + 50, offsety - 25, circleRadius * .50, 0, 2 * Math.PI, false);
+				ctx.fill();
+				ctx.closePath();
+				ctx.restore();
+
+				// Draw mouth
+				ctx.beginPath();
+				ctx.arc(offsetx, offsety, circleRadius * 0.75, 0, Math.PI, false);
+				ctx.fill();
+				ctx.closePath();
+			}
 		}
 		ctx.restore();
 	}
