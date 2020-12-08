@@ -112,7 +112,7 @@ function dataLoaded(e) {
 		let line = `<div class='result'>
 		<img src='${result.image.small_url}' class='resultImg' alt='Thumbnail'>
 		<p>${result.name}</p>
-		<button type="button" class="streamButton" id="${result.name}" onclick="seeStreams('${result.name}');">See Deals</button>
+		<button type="button" class="streamButton" id="${result.name}" onclick="main.seeStreams('${result.name}');">See Deals</button>
 		</div>`;
 
 		// Add the div to the bigString and loop
@@ -175,4 +175,4 @@ function dataError(e) {
 	console.log("An error occured");
 }
 
-export {init, searchButtonClicked, getData, getDealData, dataLoaded, dealDataLoaded, seeStreams};
+export {init, searchButtonClicked, getData, getDealData, dataLoaded, dealDataLoaded, seeStreams, dataError};
