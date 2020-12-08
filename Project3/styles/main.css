@@ -60,6 +60,23 @@ button:hover {
 	color: var(--secondary-bg-color);
 }
 
+a {
+	background-color: var(--secondary-bg-color);
+	color: var(--secondary-fg-color);
+	font-size: 1.5em;
+	transition-duration: 0.2s;
+	padding: 10px;
+	border-radius: 10px;
+	text-decoration: none;
+}
+
+a:hover {
+	background-color: var(--secondary-fg-color);
+	color: var(--secondary-bg-color);
+	transition-duration: 0.2s;
+	border-radius: 20px;
+}
+
 #content {
 	display: flex;
 	flex-wrap: wrap;

@@ -1,3 +1,5 @@
+import Footer from "./footer.js"
+
 let displayTerm = "";
 let offset = 0;
 
@@ -10,24 +12,22 @@ function init() {
 	// Bind search button
 	document.querySelector("#search").onclick = searchButtonClicked;
 	// Bind reset button
-	document.querySelector("#reset").onclick = Reset;
+	document.querySelector("#reset").onclick = reset;
 
 	// Load values from storage
 	const storedTerm = localStorage.getItem("term");
 	const storedLimit = localStorage.getItem("limit");
 
-	
+
 	if (storedTerm) {
 		document.querySelector("#searchterm").value = storedTerm;
-	}
-	else {
+	} else {
 		document.querySelector("#searchterm").value = "Portal";
 	}
-	
+
 	if (storedLimit) {
 		document.querySelector("#limit").value = storedLimit;
-	}
-	else {
+	} else {
 		document.querySelector("#limit").selected = 10;
 	}
 
@@ -38,12 +38,20 @@ function init() {
 	document.querySelector("#searchterm").onchange = e => {
 		localStorage.setItem("term", e.target.value);
 	};
+
+	// Generate footer
+	let pageFooter = new Footer("Alex Parrotto", "2020");
+	document.querySelector("#footer").innerHTML = "&copy; " + pageFooter.Year() + " " + pageFooter.Name();
 }
 
-function Reset() {
+function reset() {
 	// Reset fields
 	document.querySelector("#searchterm").value = "Portal";
 	document.querySelector("#limit").selected = 10;
+
+	// Reset UI
+	document.querySelector("#selected").innerHTML = "Deals Go Here";
+	document.querySelector("#content").innerHTML = "<p>No data yet!</p>";
 
 	// Reset local storage
 	localStorage.clear();
@@ -141,7 +149,7 @@ function dataLoaded(e) {
 		let line = `<div class='result'>
 		<img src='${result.image.small_url}' class='resultImg' alt='Thumbnail'>
 		<p>${result.name}</p>
-		<button type="button" class="streamButton" id="${result.name}" onclick="main.seeStreams('${result.name}');">See Deals</button>
+		<button type="button" class="streamButton" id="${result.name}" onclick="main.seeStreams('${result.name}');">See Price</button>
 		</div>`;
 
 		// Add the div to the bigString and loop
@@ -169,7 +177,12 @@ function dealDataLoaded(e) {
 		return; // Bail out
 	}
 
-	let bigString = `<h2>${name}</h2><h2>Cheapest Price: ${obj[0].cheapest}</h2>`;
+	// Load text
+	let bigString = `<div>
+					<h2>${name}</h2>
+					<h2>Cheapest Price: $ ${obj[0].cheapest}</h2>
+					<p><a href="https://www.cheapshark.com/redirect?dealID=${obj[0].cheapestDealID}">See Deal</a>
+					</div>`;
 
 	document.querySelector("#selected").innerHTML = bigString;
 }
@@ -182,7 +195,7 @@ function seeStreams(name) {
 	let url = D_URL;
 
 	// Get rid of any leading and trailing spaces
-	name= name.trim();
+	name = name.trim();
 
 	// Encode spaces and special characters
 	name = encodeURIComponent(name);
@@ -201,4 +214,14 @@ function dataError(e) {
 	console.log("An error occured");
 }
 
-export {init, searchButtonClicked, getData, getDealData, dataLoaded, dealDataLoaded, seeStreams, dataError};
+export {
+	init,
+	searchButtonClicked,
+	getData,
+	getDealData,
+	dataLoaded,
+	dealDataLoaded,
+	seeStreams,
+	dataError,
+	reset
+};
