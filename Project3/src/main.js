@@ -71,6 +71,9 @@ function searchButtonClicked() {
 	// Get rid of any leading and trailing spaces
 	term = term.trim();
 
+	// Strip spaces to avoid errors
+	term = term.replace(/\s/g, '');
+
 	// Encode spaces and special characters
 	term = encodeURIComponent(term);
 
