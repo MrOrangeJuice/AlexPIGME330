@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<title>Deal Bomb</title>
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="styles/main.css">
+	<script type="module" src="src/loader.js"></script>
+	<link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32" />
+	<link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16" />
+
+</head>
+
+<body>
+	<header>
+		<h1>Deal Bomb</h1>
+	</header>
+	<h2>Search the GiantBomb database for any game deal</h2>
+	<div class="form">
+		<div class="widgets">
+			Search Term ->
+			<input id="searchterm" type="text" size="20" maxlength="100" autofocus value="Portal" />
+		</div>
+
+		<div class="widgets">
+			Max # results ->
+			<select id="limit">
+				<option value="5">5</option>
+				<option value="10" selected>10</option>
+				<option value="25">25</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+			</select>
+		</div>
+
+		<div class="widgets">
+			<button type="button" id="search" class="green">Search Games</button>
+			<!--<button type="button" id="more" class="green">Find More Games</button>-->
+		</div>
+	</div>
+	<div id="status">Ready to Search!</div>
+	<hr>
+
+	<div id="contentContainer">
+		<h2>Results</h2>
+		<div id="selected">
+			Deals Go Here
+		</div>
+		<div id="content">
+			<p>No data yet!</p>
+		</div>
+	</div>
+</body>
+
+</html>

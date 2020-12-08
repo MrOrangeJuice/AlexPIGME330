@@ -1,0 +1,111 @@
+:root {
+	--main-bg-color: #070707;
+	--secondary-bg-color: #553555;
+	--main-fg-color: #ADF1D2;
+	--secondary-fg-color: #A9AFD1;
+}
+
+body {
+	background-color: var(--main-bg-color);
+	color: var(--main-fg-color);
+	text-align: center;
+	font-family: 'Source Code Pro', monospace;
+	width: 50%;
+	margin-left: 25%;
+	margin-right: 25%;
+}
+
+h1 {
+	font-size: 4rem;
+}
+
+.form {
+	background-color: var(--secondary-bg-color);
+	width: 50%;
+	margin-left: 25%;
+	margin-right: 25%;
+	padding: 20px;
+	border-radius: 20px;
+	margin-bottom: 20px;
+}
+
+hr {
+	color: var(--secondary-fg-color);
+}
+
+button {
+	background-color: var(--main-fg-color);
+	color: var(--main-bg-color);
+	font-family: 'Source Code Pro', monospace;
+	font-size: 2rem;
+	border-radius: 10px;
+	margin-top: 10px;
+	transition-duration: 0.2s;
+	border: none;
+}
+
+button:hover {
+	transition-duration: 0.2s;
+	border-radius: 15px;
+	background-color: var(--main-bg-color);
+	color: var(--main-fg-color);
+}
+
+.streamButton {
+	background-color: var(--secondary-bg-color);
+	color: var(--secondary-fg-color);
+}
+
+.streamButton:hover {
+	background-color: var(--secondary-fg-color);
+	color: var(--secondary-bg-color);
+}
+
+#content {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	transition-duration: 0.2s;
+}
+
+.result {
+	background-color: var(--main-fg-color);
+	color: var(--main-bg-color);
+	padding: 10px;
+	margin: 20px;
+	border-radius: 20px;
+	transition-duration: 0.2s;
+	width: 25%;
+	font-size: 1.5em;
+}
+
+#selected {
+	background-color: var(--main-fg-color);
+	color: var(--main-bg-color);
+	padding: 20px;
+	border-radius: 20px;
+	font-size: 1.5em;
+	width: 80%;
+	margin: auto;
+	text-align: center;
+}
+
+.resultImg {
+	width: 80%;
+}
+
+.result:hover {
+	transition-duration: 0.2s;
+	border-radius: 30px;
+}
+
+.result:hover .description {
+	display: block;
+}
+
+.description {
+	display: none;
+}
+
+
+
