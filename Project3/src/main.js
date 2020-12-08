@@ -1,5 +1,3 @@
-// Hook up functions to buttons
-
 let displayTerm = "";
 let offset = 0;
 
@@ -7,13 +5,51 @@ let offset = 0;
 const GB_URL = "bomb-proxy.php";
 const D_URL = "deal-proxy.php";
 
+// Hook up functions to buttons
 function init() {
+	// Bind search button
 	document.querySelector("#search").onclick = searchButtonClicked;
+	// Bind reset button
+	document.querySelector("#reset").onclick = Reset;
+
+	// Load values from storage
+	const storedTerm = localStorage.getItem("term");
+	const storedLimit = localStorage.getItem("limit");
+
+	
+	if (storedTerm) {
+		document.querySelector("#searchterm").value = storedTerm;
+	}
+	else {
+		document.querySelector("#searchterm").value = "Portal";
+	}
+	
+	if (storedLimit) {
+		document.querySelector("#limit").value = storedLimit;
+	}
+	else {
+		document.querySelector("#limit").selected = 10;
+	}
+
+	// Save values to storage
+	document.querySelector("#limit").onchange = e => {
+		localStorage.setItem("limit", e.target.value);
+	};
+	document.querySelector("#searchterm").onchange = e => {
+		localStorage.setItem("term", e.target.value);
+	};
+}
+
+function Reset() {
+	// Reset fields
+	document.querySelector("#searchterm").value = "Portal";
+	document.querySelector("#limit").selected = 10;
+
+	// Reset local storage
+	localStorage.clear();
 }
 
 function searchButtonClicked() {
-	console.log("searchButtonClicked() called");
-
 	// Reset offset
 	offset = 0;
 
@@ -42,9 +78,6 @@ function searchButtonClicked() {
 
 	// Update UI
 	document.querySelector("#status").innerHTML = "<b>Searching for '" + displayTerm + "'</b>";
-
-	// Print url to console
-	console.log(url);
 
 	// Request data
 	getData(url);
@@ -86,9 +119,6 @@ function dataLoaded(e) {
 	// event.target is the xhr object
 	let xhr = e.target;
 
-	// print JSON file
-	//console.log(xhr.responseText);
-
 	// Turn the text into a parsable JavaScript object
 	let obj = JSON.parse(xhr.responseText);
 
@@ -100,7 +130,6 @@ function dataLoaded(e) {
 
 	// Start building an HTML string we will display to the user
 	let results = obj.results;
-	console.log("results.length = " + results.length);
 	let bigString = "";
 
 	// Loop through the array of results
@@ -130,9 +159,6 @@ function dataLoaded(e) {
 function dealDataLoaded(e) {
 	// event.target is the xhr object
 	let xhr = e.target;
-
-	// print JSON file
-	console.log(xhr.responseText);
 
 	// Turn the text into a parsable JavaScript object
 	let obj = JSON.parse(xhr.responseText);

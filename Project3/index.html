@@ -17,41 +17,48 @@
 	<header>
 		<h1>Deal Bomb</h1>
 	</header>
-	<h2>Search the GiantBomb database for any game deal</h2>
-	<div class="form">
-		<div class="widgets">
-			Search Term ->
-			<input id="searchterm" type="text" size="20" maxlength="100" autofocus value="Portal" />
-		</div>
+	<main>
+		<h2>Search the GiantBomb database for any PC game deal</h2>
+		<div class="form">
+			<div class="widgets">
+				Search Term ->
+				<input id="searchterm" type="text" size="20" maxlength="100" />
+			</div>
 
-		<div class="widgets">
-			Max # results ->
-			<select id="limit">
-				<option value="5">5</option>
-				<option value="10" selected>10</option>
-				<option value="25">25</option>
-				<option value="50">50</option>
-				<option value="100">100</option>
-			</select>
-		</div>
+			<div class="widgets">
+				Max # results ->
+				<select id="limit">
+					<option value="5">5</option>
+					<option value="10" selected>10</option>
+					<option value="25">25</option>
+					<option value="50">50</option>
+					<option value="100">100</option>
+				</select>
+			</div>
 
-		<div class="widgets">
-			<button type="button" id="search" class="green">Search Games</button>
-			<!--<button type="button" id="more" class="green">Find More Games</button>-->
+			<div class="widgets">
+				<button type="button" id="search" class="green">Search Games</button><br>
+				<button type="button" id="reset" class="green">Reset</button>
+			</div>
 		</div>
-	</div>
-	<div id="status">Ready to Search!</div>
-	<hr>
+		<div id="status">Ready to Search!</div>
+		<hr>
 
-	<div id="contentContainer">
-		<h2>Results</h2>
-		<div id="selected">
-			Deals Go Here
+		<div id="contentContainer">
+			<h2>Results</h2>
+			<div id="selected">
+				Deals Go Here
+			</div>
+			<div id="content">
+				<p>No data yet!</p>
+			</div>
 		</div>
-		<div id="content">
-			<p>No data yet!</p>
-		</div>
-	</div>
+	</main>
+	<br>
+	<br>
+	<footer>
+		<small>&copy; Alex Parrotto</small>
+	</footer>
 </body>
 
 </html>
